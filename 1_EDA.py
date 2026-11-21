@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Análise exploratória LIAR — convertido de 1_EDA.ipynb.
+"""Análise exploratória LIAR 
 Instalação: pip install -r requirements_EDA.txt
 Execução: python 1_EDA.py
 """
