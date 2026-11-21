@@ -26,9 +26,7 @@ Execução: python 1_EDA.py
 #
 # - LIAR: manutenção das seis classes originais.
 # - SentimentalLIAR: agrupamento em duas classes, considerando `true` e `mostly-true` como verdadeiras, conforme o trabalho [3].
-# - BinaryLIAR: agrupamento em duas classes, incluindo `half-true` na classe verdadeira, conforme feito em [4].
-# - TernaryLIAR: agrupamento em três classes — falsas, parcialmente verdadeiras e verdadeiras, como adotado em [5].
-# - Criação de um DataFrame contendo os textos e as quatro classificações numéricas para comparação.
+# - Criação de um DataFrame contendo os textos e as classificações numéricas para comparação.
 #
 # **Pré-processamento textual**
 #
@@ -42,7 +40,7 @@ Execução: python 1_EDA.py
 #
 # **Visualização dos dados**
 #
-# - Geração de nuvens de palavras para cada classe dos quatro datasets.
+# - Geração de nuvens de palavras para cada classe dos datasets.
 # - Identificação das classes por número e nome.
 # - Aplicação de cores distintas para facilitar a interpretação visual.
 # - Organização das nuvens lado a lado e exportação das figuras em formato JPG.
@@ -58,18 +56,12 @@ Execução: python 1_EDA.py
 #
 # [3] Upadhayay, Bibek, and Vahid Behzadan. "Sentimental liar: Extended corpus and deep learning models for fake claim classification." 2020 IEEE International Conference on Intelligence and Security Informatics (ISI). IEEE, 2020.
 #
-# [4] Alhindi, Tariq, Savvas Petridis, and Smaranda Muresan. "Where is your evidence: Improving fact-checking by justification modeling." Proceedings of the first workshop on fact extraction and verification (FEVER). 2018.
-#
-# [5] Shushkevich, Elena, John Cardiff, and Anna Boldyreva. "Detection of truthful, semi-truthful, false and other news with arbitrary topics using BERT-based models." 2023 33rd Conference of Open Innovations Association (FRUCT). IEEE, 2023.
 
 # # Implementação
 
 # ============================================================
 # 1. INSTALAÇÃO E IMPORTAÇÕES
 # ============================================================
-
-
-
 import re
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -98,21 +90,15 @@ LIAR_URL = "https://www.cs.ucsb.edu/~william/data/liar_dataset.zip"
 
 LIAR_CLASSES = {"pants-fire": 0,"false": 1,"barely-true": 2,"half-true": 3, "mostly-true": 4,"true": 5,}
 SENTIMENTAL_CLASSES = {"pants-fire": 0, "false": 0, "barely-true": 0, "half-true": 0, "mostly-true": 1, "true": 1,}
-BINARY_CLASSES = {"pants-fire": 0, "false": 0, "barely-true": 0, "half-true": 1, "mostly-true": 1, "true": 1,}
-TERNARY_CLASSES = {"pants-fire": 0, "false": 0, "barely-true": 1, "half-true": 1, "mostly-true": 1,"true": 2,}
 
 CLASS_NAMES = {
     "liar": {0: "Pants-fire", 1: "False", 2: "Barely-true", 3: "Half-true", 4: "Mostly-true", 5: "True",},
     "sentimental_liar": { 0: "False", 1: "True",},
-    "binary_liar": { 0: "False", 1: "True",},
-    "ternary_liar": { 0: "False", 1: "Mixed / Partially True", 2: "True",},
 }
 
 DATASET_MAPS = {
     "liar": LIAR_CLASSES,
     "sentimental_liar": SENTIMENTAL_CLASSES,
-    "binary_liar": BINARY_CLASSES,
-    "ternary_liar": TERNARY_CLASSES,
 }
 
 # Cores diferentes para cada classe de cada dataset.
@@ -165,11 +151,11 @@ for split, df in splits.items():
     print(f"{split}: {len(df)} registros")
 
 # ============================================================
-# 4. TRANSFORMAÇÃO DOS QUATRO DATASETS
+# 4. TRANSFORMAÇÃO DOS DATASETS
 # ============================================================
 
 def create_label_columns(df):
-    """Adiciona os quatro rótulos numéricos ao mesmo texto."""
+    """Adiciona os rótulos numéricos ao mesmo texto."""
     result = df.copy()
     # Normaliza nomes, sem alterar os textos originais.
     names = (
@@ -198,7 +184,7 @@ df_liar = pd.concat(
     splits.values(),
     ignore_index=True,
 )
-columns = ["statement", "original_label", "liar", "sentimental_liar", "binary_liar", "ternary_liar",]
+columns = ["statement", "original_label", "liar", "sentimental_liar"]
 
 classes = ["true", "pants-fire", "half-true"]
 max_words = 8
@@ -216,7 +202,7 @@ OUTPUT_DIR = Path("figures")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 def plot_class_distribution_all(df):
-    """Plota os quatro datasets lado a lado e salva em JPG."""
+    """Plota os datasets lado a lado e salva em JPG."""
     datasets = list(DATASET_MAPS.keys())
     fig, axes = plt.subplots(1, len(datasets), figsize=(24, 5.5))
     for ax, dataset in zip(axes, datasets):
@@ -357,7 +343,7 @@ def plot_wordclouds(df, dataset, max_words=100):
     print(f"Imagem salva: {filename}")
 
 # ============================================================
-# 8. EXECUÇÃO PARA OS QUATRO DATASETS
+# 8. EXECUÇÃO PARA OS DATASETS
 # ============================================================
 
 for dataset in DATASET_MAPS:
