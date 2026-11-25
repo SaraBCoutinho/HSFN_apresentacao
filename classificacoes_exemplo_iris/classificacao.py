@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.colors import ListedColormap
 from sklearn.datasets import load_iris
-from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -71,7 +71,7 @@ def classificacoes_e_oracle(pasta):
     # 2. Definir 3 classificadores com vieses indutivos diferentes
     classifiers = {
         "Árvore de Decisão (Max Depth=2)": DecisionTreeClassifier(max_depth=2, random_state=42),
-        "Regressão Logística (Linear)": LogisticRegression(random_state=42),
+        "SVM (Kernel Linear)": SVC(kernel="linear", C=1.0),
         "KNN (k=3 Vizinhos)": KNeighborsClassifier(n_neighbors=3)
     }
 
